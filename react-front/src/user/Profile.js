@@ -5,13 +5,15 @@ import { read } from './apiUser'
 import DefaultProfile from '../Avatar/avatar.jpg'
 import DeleteUser from './DeleteUser'
 import FollowProfileButton from './FollowProfileButton'
+import ProfileTabs from './ProfileTabs'
 class Profile extends Component{
     constructor() {
         super()
             this.state = {
                 user: { following: [], followers: [] },
                 redirectToSignin: false,
-                following:false
+                following: false,
+                error:''
         }
     }
 
@@ -102,7 +104,7 @@ class Profile extends Component{
                                 <FollowProfileButton
                                     following={this.state.following}
                                     onButtonClick={this.clickFollowButton}/>
-                        )}
+                            )}
                         
                 </div>
                 </div>
@@ -110,7 +112,10 @@ class Profile extends Component{
                     <div className="col md-12 mt-5 mb-5">
                         <hr/>
                             <p className="lead">{user.about}</p>
-                        <hr/>
+                        <hr />
+                    
+                        <ProfileTabs followers={user.followers} following={user.following}/>
+                        
                     </div>
                 </div>
                 </div>

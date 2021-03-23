@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import {list} from './apiUser'
 import DefaultProfile from '../Avatar/avatar.jpg'

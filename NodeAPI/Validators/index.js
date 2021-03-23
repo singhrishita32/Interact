@@ -24,7 +24,7 @@ exports.userSignupValidator = (req,res,next) => {
     req.check('email', "Email is required").notEmpty()
     req.check('email', "Email must be 4 to 100 length")
     .matches(/.+\@.+\..+/)
-    .withMessage("Email must contain @")
+    .withMessage("Invalid Email")
     .isLength({
         min: 4,
         max: 100

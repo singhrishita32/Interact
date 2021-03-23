@@ -1,19 +1,3 @@
-// const getPosts = (req,res)=>{
-//  	res.send("Hi there again");
-// };
-// module.exports = {
-//  	getPosts
-// };
-
-
-// exports.getPosts = (req,res)=>{
-//  	res.send("Hi there again");
-// };
-
-
-
-
-
 const express = require('express'); 
 const app=express();
 const postControler=require('../Controlers/post');

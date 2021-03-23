@@ -96,7 +96,5 @@ app.use(function(err,req,res,next) {
     if(err.name == "UnauthorizedError")
         res.status(401).json({Error: "Authorization token not found"})
 })
-
-app.listen(port,()=>{
-    console.log("Yarr neend aarhi hojao",8081);
-});
+app.listen(port)
+    

@@ -63,7 +63,7 @@ class Profile extends Component{
         this.init(userId);
     }
 
-    render() {
+    render(){
         const {user,redirectToSignin} = this.state
         if(redirectToSignin) return <Redirect to="/signin"/>
         const photoUrl = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : DefaultProfile

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import {list} from './apiUser'
+import {findPeople} from './apiUser'
 import DefaultProfile from '../Avatar/avatar.jpg'
-import {Link} from 'react-router-dom'
-class Users extends Component {
+import { Link } from 'react-router-dom'
+import {isAuthenticated} from '../Auth'
+class FindPeople extends Component {
 
     constructor(){
         super()
@@ -12,7 +13,9 @@ class Users extends Component {
     }
 
     componentDidMount () {
-        list()
+        const userId = isAuthenticated().user._id
+        const token = isAuthenticated().token
+        findPeople(userId,token)
         .then(data => {
             if(data.error)
                 console.log(data.error)
@@ -21,18 +24,16 @@ class Users extends Component {
         })
     }
 
-
-
     renderUsers = users => (
         <div className="row">{
             users.map((user, i) => (
                 <div className="card col-md-4" key={i}>
-                  {/* <img className="card-img-top"
+                  <img className="card-img-top"
                         src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
                         onError={i=>i.target.src=`${DefaultProfile}`}    
                         alt={user.name}
                             style={{ height: "200px", width: "auto" }}
-                            className="img-thumbnail"/>  */}
+                            className="img-thumbnail"/> 
                     <div className="card-body">
                         <h5 className="card-title">{user.name}</h5>
                         <p className="card-text">{user.email}</p>
@@ -57,4 +58,4 @@ class Users extends Component {
     }
 }
 
-export default Users;
+export default FindPeople;

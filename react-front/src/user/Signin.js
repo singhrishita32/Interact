@@ -31,7 +31,6 @@ class Signin extends Component{
             email: email,
             password: password
         };
-        console.log(user);
         
         signin(user)
             .then(data => {

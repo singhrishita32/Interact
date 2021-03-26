@@ -9,6 +9,7 @@ import Users from './user/Users'
 import PrivateRoute from './Auth/PrivateRoute'
 import EditProfile from './user/EditProfile'
 import FindPeople from './user/FindPeople'
+import NewPost from './post/NewPost'
 const MainRouter = () => {
     console.log("Rishita. Please ache se karna abki. Baaki <3")
     return (
@@ -31,6 +32,11 @@ const MainRouter = () => {
                     exact path="/findpeople"
                     component={FindPeople}>
                 </PrivateRoute>
+                <PrivateRoute
+                    exact path="/post/create"
+                    component={NewPost}>
+                </PrivateRoute>
+
 
             </Switch>
         </div>

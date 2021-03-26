@@ -14,7 +14,8 @@ class NewPost extends Component {
             error: '',
             user: {},
             fileSize: 0,
-            loading: false
+            loading: false,
+            redirecttoProfile: false
             
         }
     }
@@ -74,7 +75,10 @@ class NewPost extends Component {
                 else {
                     console.log("Post", data)
                     this.setState({
-                        loading:false
+                        loading: false,
+                        title: '',
+                        body: '',
+                        redirecttoProfile:true
                     })
 
                 }
@@ -123,11 +127,11 @@ class NewPost extends Component {
     );
     
     render() {
-        const {loading,title,body,photo,user,error} = this.state
+        const {loading,title,body,redirecttoProfile,photo,user,error} = this.state
 
-        // if (redirectToProfile) {
-        //    return  <Redirect to={`/user/${id}`}></Redirect>
-        // }
+        if (redirecttoProfile) {
+           return  <Redirect to={`/user/${user._id}`}></Redirect>
+        }
         
         // const photoUrl = id ?
         //     `${process.env.REACT_APP_API_URL

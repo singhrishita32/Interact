@@ -19,7 +19,8 @@ exports.getPosts=(req,res)=>
 {
 	const posts = Post.find()
 	.populate("postedBy", "_id name")
-	.select("_id title body")
+		.select("_id title body created")
+		.sort({created:-1})
 	.then( (posts)=> { res.json(posts)} )
 	.catch( (err)=> { console.log(err)} )
 };
@@ -45,12 +46,6 @@ exports.createPost = (req,res,next) => {
 			res.json(result)
 		})
 	})
-
-	// const post =new Post(req.body);
-	// console.log("CREATE POST",req.body);
-	// post.save().then(result => {
-	// 	res.status(200).json({post: result});
-	// })
 }
 
 

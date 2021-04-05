@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import {list} from './apiPost'
-//import DefaultProfile from '../Avatar/avatar.jpg'
+import { list } from './apiPost'
+import DefaultPost from '../Avatar/avatar.jpg'
 import {Link} from 'react-router-dom'
 class Posts extends Component {
 
@@ -31,12 +31,12 @@ class Posts extends Component {
                 const posterId = post.postedBy ? `/user/${post.postedBy._id}`:""
                 return (
                     <div className="card col-md-4" key={i}>
-                    {/* <img className="card-img-top"
-                          src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
-                          onError={i=>i.target.src=`${DefaultProfile}`}    
-                          alt={user.name}
-                              style={{ height: "200px", width: "auto" }}
-                              className="img-thumbnail"/>  */}
+                    <img className="card-img-top"
+                          src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+                          onError={i=>i.target.src=`${DefaultPost}`}    
+                          alt={post.title}
+                              style={{ height: "200px",paddingTop:"20px", width: "auto" }}
+                              className="img-thumbnail"/> 
                       <div className="card-body">
                           <h5 className="card-title">{post.title}</h5>
                           <p className="card-text">{post.body.substring(0,100)}

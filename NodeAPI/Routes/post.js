@@ -14,7 +14,7 @@ router.post('/post/new/:userId',Auth.requireSignin, postControler.createPost,val
 router.get('/post/by/:userId',Auth.requireSignin,postControler.postByUser);
 router.delete('/post/:postId',Auth.requireSignin,postControler.isPoster, postControler.deletePost)
 router.put('/post/:postId',Auth.requireSignin,postControler.isPoster,postControler.updatePost);
-
+router.get("/post/photo/:postId",postControler.photo)
 
 router.param("userId",userById)
 router.param("postId",postControler.postById)

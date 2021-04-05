@@ -10,6 +10,7 @@ import PrivateRoute from './Auth/PrivateRoute'
 import EditProfile from './user/EditProfile'
 import FindPeople from './user/FindPeople'
 import NewPost from './post/NewPost'
+import SinglePost from './post/SinglePost'
 const MainRouter = () => {
     console.log("Rishita. Please ache se karna abki. Baaki <3")
     return (
@@ -20,6 +21,7 @@ const MainRouter = () => {
                 <Route exact path="/signup" component={Signup}></Route>
                 <Route exact path="/" component={Home}></Route>
                 <Route exact path="/signin" component={Signin}></Route>
+                <Route exact path="/post/:postId" component={SinglePost}></Route>
                 <PrivateRoute
                     exact path="/user/edit/:userId"
                     component={EditProfile}>

@@ -98,3 +98,8 @@ exports.deletePost = (req,res,next) => {
 		res.json({"Message": "Deleted Post!"});
 	})
 }
+
+exports.photo = (req, res, next) => {
+	req.set("Content-Type", req, post.photo.contentType);
+	return res.send(req.post.photo.data)
+}

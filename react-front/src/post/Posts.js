@@ -31,12 +31,12 @@ class Posts extends Component {
                 const posterId = post.postedBy ? `/user/${post.postedBy._id}`:""
                 return (
                     <div className="card col-md-4" key={i}>
-                    <img className="card-img-top"
+                    <img 
                           src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                           onError={i=>i.target.src=`${DefaultPost}`}    
                           alt={post.title}
                               style={{ height: "200px",paddingTop:"20px", width: "auto" }}
-                              className="img-thumbnail"/> 
+                              className="img-thumbnail mb-2 mt-2"/> 
                       <div className="card-body">
                           <h5 className="card-title">{post.title}</h5>
                           <p className="card-text">{post.body.substring(0,100)}
@@ -60,8 +60,10 @@ class Posts extends Component {
         const{posts} = this.state
         return (
             <div className="container">
-                <h2 className="mt-5 mb-5">Recent Posts</h2>
-                {this.renderPosts(posts)}
+                <h2 className="mt-5 mb-5">
+                    {!posts.length ? "Loading..." : this.renderPosts(posts)}
+                </h2>
+                
             </div>
         )
     }

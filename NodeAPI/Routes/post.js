@@ -9,7 +9,8 @@ const post = require('../Models/post');
 
 const router= express.Router();
 
-router.get('/posts',postControler.getPosts);
+router.get('/posts', postControler.getPosts);
+router.get('/post/:postId',postControler.singlePost)
 router.post('/post/new/:userId',Auth.requireSignin, postControler.createPost,validator.createPostValidator);
 router.get('/post/by/:userId',Auth.requireSignin,postControler.postByUser);
 router.delete('/post/:postId',Auth.requireSignin,postControler.isPoster, postControler.deletePost)

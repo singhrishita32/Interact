@@ -12,7 +12,7 @@ const router= express.Router();
 router.get('/posts', postControler.getPosts);
 router.get('/post/:postId',postControler.singlePost)
 router.post('/post/new/:userId',Auth.requireSignin, postControler.createPost,validator.createPostValidator);
-router.get('/post/by/:userId',Auth.requireSignin,postControler.postByUser);
+router.get('/posts/by/:userId',Auth.requireSignin,postControler.postByUser);
 router.delete('/post/:postId',Auth.requireSignin,postControler.isPoster, postControler.deletePost)
 router.put('/post/:postId',Auth.requireSignin,postControler.isPoster,postControler.updatePost);
 router.get("/post/photo/:postId",postControler.photo)

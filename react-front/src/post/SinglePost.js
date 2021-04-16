@@ -50,7 +50,7 @@ class SinglePost extends Component{
         const {post}=this.state
         return (
             <div className="container">
-                <h2>{post.title}</h2>
+                <h2 className="jumbotron display-2 mt-5 mb-5">{post.title}</h2>
 
                 {!post ? (
                     <div className="jumbotron tect-center">

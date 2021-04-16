@@ -56,7 +56,7 @@ exports.postByUser = (req,res) => {
 	.exec( (err,posts) => {
 		if(err)
 			res.status(400).json({error: err});
-		res.json({posts: posts});
+		res.json(posts);
 	})
 }
 
@@ -100,7 +100,7 @@ exports.deletePost = (req,res,next) => {
 }
 
 exports.photo = (req, res, next) => {
-	req.set("Content-Type", req, post.photo.contentType);
+	req.set("Content-Type", req.post.photo.contentType);
 	return res.send(req.post.photo.data)
 }
 

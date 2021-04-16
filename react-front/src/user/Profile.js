@@ -6,6 +6,8 @@ import DefaultProfile from '../Avatar/avatar.jpg'
 import DeleteUser from './DeleteUser'
 import FollowProfileButton from './FollowProfileButton'
 import ProfileTabs from './ProfileTabs'
+import {listByUser} from '../post/apiPost'
+
 class Profile extends Component{
     constructor() {
         super()
@@ -13,7 +15,8 @@ class Profile extends Component{
                 user: { following: [], followers: [] },
                 redirectToSignin: false,
                 following: false,
-                error:''
+                error: '',
+                posts:[]
         }
     }
 
@@ -25,18 +28,32 @@ class Profile extends Component{
         return match
     }
 
+    loadPosts = userId => {
+        const token = isAuthenticated().token;
+            listByUser(userId, token)
+            .then(data => {
+                if (data.error)
+                    console.log(data.error);
+                else {
+                    this.setState({
+                        posts:data
+                    })
+                }
+        })
+
+    }
     init = userId => {
         const token = isAuthenticated().token;
         read(userId, token)
             .then(data => {
-                console.log(data);
                 if (data.error) {
                     console.log("ERROR");
                     this.setState({ redirectToSignin: true });
                 }
                 else {
                     let following = this.checkFollow(data)
-                    this.setState({ user: data, following:following });
+                    this.setState({ user: data, following: following });
+                    this.loadPosts(data._id)
                 }
             });
     };
@@ -67,21 +84,21 @@ class Profile extends Component{
     }
 
     render(){
-        const {user,redirectToSignin} = this.state
+        const {user,redirectToSignin,posts} = this.state
         if(redirectToSignin) return <Redirect to="/signin"/>
-        //const photoUrl = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : DefaultProfile
+        const photoUrl = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : DefaultProfile
 
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Profile</h2>
                 <div className="row">
                 <div className="col-md-6">
-                        {/* <img className="card-img-top"
+                        <img className="card-img-top"
                             src={photoUrl}
                             onError={i=>i.target.src=`${DefaultProfile}`}
                             alt={user.name}
                             style={{ height: "200px", width: "auto" }}
-                            className="img-thumbnail"/> */}
+                            className="img-thumbnail"/>
                 </div>
                     <div className="col-md-6">
                         
@@ -96,6 +113,9 @@ class Profile extends Component{
                             ?
                             (
                             <div className="d-inline-block">
+                                    <Link className="btn btn-raised btn-info mr-5"
+                                    to={`/post/create`}>
+                                    Create Post</Link>
                                 <Link to={`/user/edit/${user._id}`} className="btn btn-raised btn-success mr-5">
                                     Edit Profile
                                 </Link>
@@ -115,7 +135,10 @@ class Profile extends Component{
                             <p className="lead">{user.about}</p>
                         <hr />
                     
-                        <ProfileTabs followers={user.followers} following={user.following}/>
+                        <ProfileTabs
+                            followers={user.followers}
+                            following={user.following}
+                            posts={posts}/>
                         
                     </div>
                 </div>

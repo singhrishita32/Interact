@@ -25,7 +25,7 @@ class SinglePost extends Component{
 
     }
 
-    deletPost = () => {
+    deletePost = () => {
         const token = isAuthenticated().token;
         const postId = this.props.match.params.postId;
         remove(postId, token)
@@ -35,6 +35,13 @@ class SinglePost extends Component{
                 else
                     this.setState({deleted:true})
         })
+    }
+
+    deleteConfirmed = () => {
+        let answer = window.confirm("Are you sure to delete?")
+        if (answer) {
+            this.deletePost()
+        }
     }
 
     renderPost = (post) => {
@@ -66,7 +73,7 @@ class SinglePost extends Component{
                                 Update Post
                             </button>
                     
-                            <button onClick={this.deletPost} className="btn btn-raised btn-primary btn-warning mr-5">
+                            <button onClick={this.deleteConfirmed} className="btn btn-raised btn-primary btn-warning mr-5">
                             Delete Post
                             </button>
                         </>

@@ -10,6 +10,7 @@ import PrivateRoute from './Auth/PrivateRoute'
 import EditProfile from './user/EditProfile'
 import FindPeople from './user/FindPeople'
 import NewPost from './post/NewPost'
+import EditPost from './post/EditPost'
 import SinglePost from './post/SinglePost'
 const MainRouter = () => {
     console.log("Rishita. Please ache se karna abki. Baaki <3")
@@ -23,6 +24,10 @@ const MainRouter = () => {
                 <PrivateRoute
                     exact path="/post/create"
                     component={NewPost}>
+                </PrivateRoute>
+                <PrivateRoute
+                    exact path="/post/edit/:postId"
+                    component={EditPost}>
                 </PrivateRoute>
 
                 <Route exact path="/signin" component={Signin}></Route>

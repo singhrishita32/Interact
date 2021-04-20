@@ -184,12 +184,11 @@ class EditProfile extends Component {
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Edit Profile</h2>
-                <div
-            className="alert alert-danger"
-            style={{ display: error ? "":"none"}}
-        >
-            {error}
-                </div>
+            <div
+                className="alert alert-danger"
+                style={{ display: error ? "":"none"}}>
+                 {error}
+            </div>
                 
                 {loading ? (
                     <div className="jumbotron text-center">
@@ -199,9 +198,14 @@ class EditProfile extends Component {
                         ""
                     )}
                 
-                <img style={{ height: "200px", width: "auto" }}
+                <img style={{
+                    height: "200px",
+                    width: "auto"
+                    }}
+                    onError={i=>(i.target.src=`${DefaultProfile}`)}
                     className="img-thumbnail"
-                    src={photoUrl} alt={name} />
+                    src={photoUrl}
+                    alt={name} />
                 {this.signupForm(name,email,about, password)}
             </div>
         ); 

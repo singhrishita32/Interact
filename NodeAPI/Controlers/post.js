@@ -2,7 +2,7 @@ const { Result } = require('express-validator');
 const Post = require('../Models/post')
 const formidable = require('formidable')
 const fs = require('fs')
-const lodash = require("lodash")
+const _ = require("lodash")
 
 // exports.getPosts=(req,res)=>{
 // 	res.json({
@@ -79,16 +79,48 @@ exports.isPoster = (req,res,next) => {
 }
 
 
-exports.updatePost = (req,res,next) => {
-	let post = req.post
-	//post = lodash.extend(post, req.body)
-	post.update = Date.now
-	post.save( (err) => {
-		if(err)
-			return res.status(400).json({error: err})
-		res.json(post);
-	})
-}
+// exports.updatePost = (req,res,next) => {
+// 	let post = req.post
+// 	//post = lodash.extend(post, req.body)
+// 	post.update = Date.now
+// 	post.save( (err) => {
+// 		if(err)
+// 			return res.status(400).json({error: err})
+// 		res.json(post);
+// 	})
+// }
+
+
+exports.updatePost= (req, res, next) => {
+    let form = new formidable.IncomingForm()
+    form.keepExtensions = true
+    form.parse(req, (err,fields,files) => {
+        if (err) {
+            return res.status(400).json(
+                {
+                    error: "Photo couldn't be uploaded"
+                })
+        }
+        let post = req.post
+        post = _.extend(post, fields)
+        post.updated = Date.now()
+
+        
+        if (files.photo) {
+            post.photo.data = fs.readFileSync(files.photo.path)
+            post.photo.contentType=files.photo.type
+        }
+
+        post.save((err, success) => {
+            if(err){ 
+                return res.status(400).json
+                    ({ error: err })
+            }
+            res.json({post:post});
+        })
+    })
+};
+
 
 exports.deletePost = (req,res,next) => {
 	let post = req.post

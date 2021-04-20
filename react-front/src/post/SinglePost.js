@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { singlePost } from './apiPost'
+import { singlePost,remove } from './apiPost'
 import DefaultPost from '../Avatar/avatar.jpg'
-import {Link} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import {isAuthenticated} from '../Auth'
 class SinglePost extends Component{
     state = {
-        post:''
+        post: '',
+        deleted:false
     }
     componentDidMount = () => {
         const postId = this.props.match.params.postId
@@ -23,30 +25,67 @@ class SinglePost extends Component{
 
     }
 
+    deletPost = () => {
+        const token = isAuthenticated().token;
+        const postId = this.props.match.params.postId;
+        remove(postId, token)
+            .then(data => {
+                if (data.error)
+                    console.log(data.error)
+                else
+                    this.setState({deleted:true})
+        })
+    }
+
     renderPost = (post) => {
         const posterName = post.postedBy ? post.postedBy.name : "Unknown"
         const posterId = post.postedBy ? `/user/${post.postedBy._id}`:""
 
         return (
-            <div className="card col-md-4">
-            <img 
-                  src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-                  onError={i=>i.target.src=`${DefaultPost}`}    
-                  alt={post.title}
-                      style={{ height: "200px",paddingTop:"20px", width: "auto" }}
-                      className="img-thumbnail mb-3 mt-2"/> 
-              <div className="card-body">
-                  <p className="card-text">{post.body}
-                      <br />
-                      Posted by {" "} <Link to={`${posterId}`}>{posterName}</Link> {" "}  on {new Date(post.created).toDateString()}</p>
-                  
-                  <Link to={`/`} className="btn btn-raised btn-primary btn-sm">
-                      Back to Posts</Link>
-              </div>
-          </div>
+            <div>
+                <img
+                    src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+                    onError={i=>i.target.src=`${DefaultPost}`}    
+                    alt={post.title}
+                    className="img-thumbnail mb-3 mt-2"
+                    style={{
+                        height: '300px',
+                        width: '100%',
+                        objectFit: 'cover'
+                    }}
+                />
+                <br />
+                <div className="d-inline-block">
+                    <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
+                        Back to Posts
+                    </Link>
+                    {isAuthenticated().user
+                        && isAuthenticated().user._id === post.postedBy._id &&
+                        <>
+                            <button className="btn btn-raised btn-primary btn-warning mr-5">
+                                Update Post
+                            </button>
+                    
+                            <button onClick={this.deletPost} className="btn btn-raised btn-primary btn-warning mr-5">
+                            Delete Post
+                            </button>
+                        </>
+                    }
+                </div>
+                <div>
+                    <p>
+                        <br />
+                        Posted by {" "} <Link to={`${posterId}`}>{posterName}</Link> {" "}  on {new Date(post.created).toDateString()}
+                    </p>
+                    <br />
+                    {post.body}
+                </div>
+            </div>
         )
     }
     render() {
+        if (this.state.deleted)
+            return <Redirect tp={'/'}></Redirect>
         const {post}=this.state
         return (
             <div className="container">

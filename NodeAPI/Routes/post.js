@@ -10,6 +10,8 @@ const post = require('../Models/post');
 const router= express.Router();
 
 router.get('/posts', postControler.getPosts);
+router.put('/post/like', Auth.requireSignin, postControler.like);
+router.put('/post/unlike', Auth.requireSignin, postControler.unlike);
 router.get('/post/:postId',postControler.singlePost)
 router.post('/post/new/:userId',Auth.requireSignin, postControler.createPost,validator.createPostValidator);
 router.get('/posts/by/:userId',Auth.requireSignin,postControler.postByUser);

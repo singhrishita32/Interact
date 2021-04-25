@@ -1,29 +1,37 @@
 import React, { Component } from 'react'
-import { singlePost,remove } from './apiPost'
+import { singlePost,remove ,like,unlike} from './apiPost'
 import DefaultPost from '../Avatar/avatar.jpg'
 import { Link, Redirect } from 'react-router-dom'
 import {isAuthenticated} from '../Auth'
 class SinglePost extends Component{
     state = {
         post: '',
-        deleted:false
+        deleted: false,
+        like: false,
+        likes: 0,
+        redirectToSignin: false
     }
-    componentDidMount = () => {
-        const postId = this.props.match.params.postId
-        singlePost(postId)
-            .then(data => {
-                if (data.error) {
-                console.log(data.error)
-                }
-                else {
-                    this.setState({
-                        post:data
-                    })
-                }
-            })
-        
+    checkLike = likes => {
+        const userId = isAuthenticated() && isAuthenticated().user._id;
+        let match = likes.indexOf(userId) !== -1;
+        return match;
+    };
 
-    }
+    componentDidMount = () => {
+        const postId = this.props.match.params.postId;
+        singlePost(postId).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                this.setState({
+                    post: data,
+                    likes: data.likes.length,
+                    like: this.checkLike(data.likes),
+                });
+            }
+        });
+    };
+
 
     deletePost = () => {
         const token = isAuthenticated().token;
@@ -43,11 +51,36 @@ class SinglePost extends Component{
             this.deletePost()
         }
     }
+    likeToggle = () => {
+        if (!isAuthenticated()) {
+            this.setState({ redirectToSignin: true });
+            return false;
+        }
+        let callApi = this.state.like ? unlike : like;
+        const userId = isAuthenticated().user._id;
+        const postId = this.state.post._id;
+        const token = isAuthenticated().token;
+
+        callApi(userId, token, postId).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                });
+            }
+        });
+    };
 
     renderPost = (post) => {
+        
+        const { likes, like,redirectToSignin } = this.state
         const posterName = post.postedBy ? post.postedBy.name : "Unknown"
         const posterId = post.postedBy ? `/user/${post.postedBy._id}`:""
-
+        if (redirectToSignin) {
+            return <Redirect to={`/signin`} />;
+        }
         return (
             <div>
                 <img
@@ -62,6 +95,12 @@ class SinglePost extends Component{
                     }}
                 />
                 <br />
+
+                {like ? <button onClick={this.likeToggle}>Unlike</button> :
+                <button onClick={this.likeToggle}>Like</button>}
+
+                <hr />
+                <h3>{likes} Like</h3>
                 <div className="d-inline-block">
                     <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
                         Back to Posts

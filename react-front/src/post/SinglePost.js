@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import { singlePost,remove ,like,unlike} from './apiPost'
 import DefaultPost from '../Avatar/avatar.jpg'
 import { Link, Redirect } from 'react-router-dom'
-import {isAuthenticated} from '../Auth'
+import { isAuthenticated } from '../Auth'
+import Comment from './Comment'
+
 class SinglePost extends Component{
     state = {
         post: '',
-        deleted: false,
         like: false,
         likes: 0,
-        redirectToSignin: false
+        redirectToSignin: false,
+        comments:[]
     }
     checkLike = likes => {
         const userId = isAuthenticated() && isAuthenticated().user._id;
@@ -27,6 +29,7 @@ class SinglePost extends Component{
                     post: data,
                     likes: data.likes.length,
                     like: this.checkLike(data.likes),
+                    comments:data.comments
                 });
             }
         });
@@ -72,6 +75,12 @@ class SinglePost extends Component{
             }
         });
     };
+
+    updateComments = comments => {
+        this.setState({
+            comments
+        })
+    }
 
     renderPost = (post) => {
         
@@ -130,9 +139,11 @@ class SinglePost extends Component{
         )
     }
     render() {
-        if (this.state.deleted)
-            return <Redirect tp={'/'}></Redirect>
-        const {post}=this.state
+        const { post, redirectToSignin, comments } = this.state;
+
+        if(redirectToSignin) {
+            return <Redirect to={`/signin`} />;
+        }
         return (
             <div className="container">
                 <h2 className="jumbotron display-2 mt-5 mb-5">{post.title}</h2>
@@ -143,7 +154,10 @@ class SinglePost extends Component{
                         </div>
                 ) : (
                     this.renderPost(post)
-                 )}
+                )}
+                <Comment postId={post._id}
+                    comments={comments}
+                    updateComments={this.updateComments} />
             </div>       
         )
     }

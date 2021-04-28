@@ -194,14 +194,13 @@ exports.comment = (req, res) => {
     );
 }
 exports.uncomment = (req, res) => {
-	let comment = req.body.comment
-	
-	Post.findByIdAndUpdate(req.body.postId,
-		{ $pull: { comments: { id: comment._id } } },
-		{ new: true })
-		.populate('comments.postedBy', "_id name")
-		.populate('postedBy',"_id name")
-		.exec((err, result) => {
+    let comment = req.body.comment;
+
+	Post.findByIdAndUpdate(req.body.postId, {
+		$pull:{ comments: { _id: comment._id } }}, { new: true })
+        .populate('comments.postedBy', '_id name')
+        .populate('postedBy', '_id name')
+        .exec((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -209,6 +208,5 @@ exports.uncomment = (req, res) => {
             } else {
                 res.json(result);
             }
-        }
-    );
-}
+        });
+};

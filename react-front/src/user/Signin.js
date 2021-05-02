@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import { Redirect } from 'react-router-dom';
 import { signin, authenticate } from '../Auth'
+import { Link, Redirect } from "react-router-dom";
+
 class Signin extends Component{
     constructor(){
         super()
@@ -78,6 +79,7 @@ class Signin extends Component{
            return <Redirect to="/"></Redirect>
        }
         return (
+            
             <div className="container">
                 <h2 className="mt-5 mb-5">SignIn</h2>
 
@@ -93,7 +95,13 @@ class Signin extends Component{
                  )}
 
 
-                {this.signinForm(email,password)}    
+                {this.signinForm(email, password)}
+                <p>
+   <Link to="/forgot-password" className="text-danger">
+       {" "}
+       Forgot Password
+   </Link>
+</p>
             </div>
         );
     };

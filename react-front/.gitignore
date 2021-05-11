@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 
+
+SocialLogin.js
 # testing
 /coverage
 
